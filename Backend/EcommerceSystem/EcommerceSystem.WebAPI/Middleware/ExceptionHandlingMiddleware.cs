@@ -36,7 +36,10 @@ namespace EcommerceSystem.WebAPI.Middleware
                     context,
                     HttpStatusCode.BadRequest,
                     "Validation failed",
-                    ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                    ex.Errors.Select(e => new {
+                        Field = e.PropertyName,
+                        Error = e.ErrorMessage
+                    })
                 );
             }
             catch (BusinessException ex) // ❌ Business logic error

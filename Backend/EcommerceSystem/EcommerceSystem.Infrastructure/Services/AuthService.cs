@@ -14,7 +14,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using EcommerceSystem.Application.Common.Exceptions;
-
+using BCrypt.Net;
+using EcommerceSystem.Infrastructure.Persistence.Models;
+using BCrypt.Net;
 
 namespace EcommerceSystem.Infrastructure.Services
 {
@@ -38,9 +40,11 @@ namespace EcommerceSystem.Infrastructure.Services
             }
 
             // TODO: Sau này dùng BCrypt để check password hash
-            if (user.Passwordhash != request.Password)
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.Passwordhash);
+
+            if(!isValidPassword)
             {
-                throw new BusinessException("Invalid email or password");
+                throw new BusinessException("Invalid password");
             }
             // 🔹 Check JWT config
             var secret = _configuration["Jwt:Key"];
@@ -74,6 +78,35 @@ namespace EcommerceSystem.Infrastructure.Services
                 Token = tokenHandler.WriteToken(token),
                 Expiration = tokenDescriptor.Expires.Value
             };
+        }
+
+
+        public async Task<bool> RegisterAsync(RegisterRequest request)
+        {
+            // Check exsiting email
+            var existingUser = await _context.Customers.FirstOrDefaultAsync(u => u.Email == request.Email);
+            if (existingUser != null)
+            {
+                throw new BusinessException("Email already in use");
+            }
+            //Hash password
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+            //Create new user
+            var newUser = new Customer
+            {
+                Name = request.Name,
+                Email = request.Email,
+                Passwordhash = passwordHash,
+                Authprovider = "Local",
+                Role = "Customer",
+                Createdat = DateTime.Now
+            };
+
+            _context.Customers.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

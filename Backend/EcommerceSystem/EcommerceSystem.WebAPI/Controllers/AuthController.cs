@@ -23,5 +23,12 @@ namespace EcommerceSystem.WebAPI.Controllers
             var response = await _authService.LoginAsync(request);
             return Ok(BaseResponse<Object>.SuccessResponse(response, "Login Success"));
         }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            var response = await _authService.RegisterAsync(request);
+            return Ok(BaseResponse<bool>.SuccessResponse(response, "Register Success"));
+        }
     }
 }
