@@ -12,6 +12,11 @@ using EcommerceSystem.WebAPI.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MediatR;
+using EcommerceSystem.Application.Features.Auth.Commands;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +24,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginValidator>());
 builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
+
+
+//MediatR
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly));
 
 // Tắt ProblemDetails mặc định (dùng middleware custom thay thế)
 builder.Services.Configure<ApiBehaviorOptions>(options =>
