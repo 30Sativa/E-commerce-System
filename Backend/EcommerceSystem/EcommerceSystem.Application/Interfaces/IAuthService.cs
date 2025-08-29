@@ -12,5 +12,7 @@ namespace EcommerceSystem.Application.Interfaces
     {
         Task<AuthResponse> LoginAsync(LoginRequest request);
         Task<bool> RegisterAsync(RegisterRequest request);
+
+        Task<AuthResponse> GoogleLoginAsync(string idToken);
     }
 }

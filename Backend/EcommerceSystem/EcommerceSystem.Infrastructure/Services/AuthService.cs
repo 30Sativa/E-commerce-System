@@ -17,6 +17,7 @@ using EcommerceSystem.Application.Common.Exceptions;
 using BCrypt.Net;
 using EcommerceSystem.Infrastructure.Persistence.Models;
 using BCrypt.Net;
+using Google.Apis.Auth;
 
 namespace EcommerceSystem.Infrastructure.Services
 {
@@ -29,6 +30,67 @@ namespace EcommerceSystem.Infrastructure.Services
         {
             _context = context;
             _configuration = configuration;
+        }
+
+        public async Task<AuthResponse> GoogleLoginAsync(string idToken)
+        {
+            // 1. Xác thực token từ Google
+            var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, new GoogleJsonWebSignature.ValidationSettings
+            {
+                Audience = new[] { _configuration["Authentication:Google:ClientId"] } // ClientId bạn tạo trên Google Cloud
+            });
+
+            // 2. Kiểm tra trong DB đã có user chưa
+            var user = await _context.Customers.FirstOrDefaultAsync(u => u.Email == payload.Email);
+
+            if (user == null)
+            {
+                // Nếu chưa có thì tạo mới
+                user = new Customer
+                {
+                    Name = payload.Name ?? payload.Email,
+                    Email = payload.Email,
+                    Authprovider = "Google",
+                    Role = "Customer",
+                    Createdat = DateTime.UtcNow
+                };
+
+                _context.Customers.Add(user);
+                await _context.SaveChangesAsync();
+            }
+
+            // 3. Tạo JWT token trả về cho FE
+            var secret = _configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(secret))
+                throw new Exception("JWT Key is missing in configuration!");
+
+            var key = Encoding.UTF8.GetBytes(secret);
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Customerid.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role ?? "Customer")
+            };
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(2),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"]
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return new AuthResponse
+            {
+                Token = tokenHandler.WriteToken(token),
+                Expiration = tokenDescriptor.Expires.Value
+            };
         }
 
         public async Task<AuthResponse> LoginAsync(LoginRequest request)
