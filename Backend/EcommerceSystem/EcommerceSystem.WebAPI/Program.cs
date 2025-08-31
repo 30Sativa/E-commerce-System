@@ -31,10 +31,13 @@ builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 // Quét toàn bộ assembly của Application
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ICustomerRepository).Assembly));
-
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(IProductRepository).Assembly));
 // ---------------- AutoMapper ----------------
 builder.Services.AddAutoMapper(typeof(CustomerAppProfile).Assembly,
-                               typeof(CustomerInfraProfile).Assembly);
+                               typeof(CustomerInfraProfile).Assembly,
+                               typeof(ProductAppProfile).Assembly,
+                               typeof(ProductInfraProfile).Assembly);
 
 
 // ---------------- API Behavior ----------------
@@ -46,7 +49,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 // ---------------- Dependency Injection ----------------
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 // ---------------- Swagger ----------------
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
