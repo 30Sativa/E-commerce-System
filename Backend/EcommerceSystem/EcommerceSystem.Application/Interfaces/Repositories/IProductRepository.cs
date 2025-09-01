@@ -11,6 +11,8 @@ namespace EcommerceSystem.Application.Interfaces.Repositories
     {
         Task<IEnumerable<ProductEntity>> GetAllAsync();
         Task<ProductEntity?> GetByIdAsync(int id);
+        Task<IEnumerable<ProductEntity>> GetByCategoryAsync(int categoryId);
+
         Task<ProductEntity> AddAsync(ProductEntity productEntity);
         Task<bool> UpdateAsync(ProductEntity productEntity);
         Task DeleteAsync(ProductEntity productEntity);

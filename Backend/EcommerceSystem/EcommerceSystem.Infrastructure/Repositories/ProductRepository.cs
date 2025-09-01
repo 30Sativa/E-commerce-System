@@ -49,6 +49,14 @@ namespace EcommerceSystem.Infrastructure.Repositories
             return _mapper.Map<IEnumerable<ProductEntity>>(product);
         }
 
+        public async Task<IEnumerable<ProductEntity>> GetByCategoryAsync(int categoryId)
+        {
+           var products = await  _context.Products.Include(p => p.Category)
+                .Where(p => p.Categoryid == categoryId)
+                .ToListAsync();
+            return _mapper.Map<IEnumerable<ProductEntity>>(products);
+        }
+
         public async Task<ProductEntity?> GetByIdAsync(int id)
         {
             var product = await _context.Products

@@ -42,6 +42,17 @@ namespace EcommerceSystem.WebAPI.Controllers
             return Ok(BaseResponse<ProductResponse>.SuccessResponse(product));
         }
 
+        [HttpGet("category/{categoryId}")]
+        public async Task<IActionResult> GetProductsByCategory(int categoryId)
+        {
+            var products = await _mediator.Send(new GetProductsByCategoryQuery(categoryId));
+            if (products == null || !products.Any())
+            {
+                return NotFound(BaseResponse<IEnumerable<ProductResponse>>.FailResponse("No products found for this category"));
+            }
+            return Ok(BaseResponse<IEnumerable<ProductResponse>>.SuccessResponse(products, "Get products by category success"));
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
         {
