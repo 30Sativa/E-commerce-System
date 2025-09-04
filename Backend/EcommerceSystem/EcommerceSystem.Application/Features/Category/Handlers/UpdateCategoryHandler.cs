@@ -8,6 +8,7 @@ using EcommerceSystem.Application.DTOs.Responses.Category;
 using EcommerceSystem.Application.Features.Category.Commands;
 using EcommerceSystem.Application.Interfaces.Repositories;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace EcommerceSystem.Application.Features.Category.Handlers
 {
@@ -16,11 +17,12 @@ namespace EcommerceSystem.Application.Features.Category.Handlers
 
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
-
-        public UpdateCategoryHandler(ICategoryRepository categoryRepository, IMapper mapper)
+        private readonly IDistributedCache _cache;
+        public UpdateCategoryHandler(ICategoryRepository categoryRepository, IMapper mapper, IDistributedCache cache)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _cache = cache;
         }
 
 
@@ -36,6 +38,7 @@ namespace EcommerceSystem.Application.Features.Category.Handlers
                 category.Name = request.Category.Name;
             }
             await _categoryRepository.UpdateAsync(category);
+            await _cache.RemoveAsync("categories:all", cancellationToken);
             return _mapper.Map<CategoryResponse>(category);
         }
     }

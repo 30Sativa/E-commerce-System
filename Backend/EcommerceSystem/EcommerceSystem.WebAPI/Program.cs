@@ -17,6 +17,7 @@ using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using EcommerceSystem.Application.Mappings;
 using EcommerceSystem.Infrastructure.Mappings;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 
 
@@ -49,7 +50,12 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true; // dùng middleware custom
 });
-
+//------------------Redis-------------------
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "ECommerce_";
+});
 // ---------------- Dependency Injection ----------------
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
