@@ -31,11 +31,13 @@ namespace EcommerceSystem.Infrastructure.Repositories
             return _mapper.Map<CategoryEntity>(category);
         }
 
-        public Task DeleteAsync(CategoryEntity categoryEntity)
+        public async Task DeleteAsync(CategoryEntity categoryEntity)
         {
-            var category = _mapper.Map<Category>(categoryEntity);
-            _context.Categories.Remove(category);
-            return _context.SaveChangesAsync();
+            var category = await _context.Categories.FindAsync(categoryEntity.Categoryid);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+            }
         }
 
         public async Task<IEnumerable<CategoryEntity>> GetAllAsync()

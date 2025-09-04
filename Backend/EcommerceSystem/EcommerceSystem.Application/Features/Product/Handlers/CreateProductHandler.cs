@@ -30,7 +30,7 @@ namespace EcommerceSystem.Application.Features.Product.Handlers
             entity.CreatedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified);
             entity.UpdatedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified);
             var created = await _productRepository.AddAsync(entity);
-            return _mapper.Map<ProductResponse>(created);
+            return _mapper.Map<ProductResponse>(created);   
         }
     }
 }

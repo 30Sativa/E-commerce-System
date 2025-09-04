@@ -33,11 +33,15 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ICustomerRepository).Assembly));
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(IProductRepository).Assembly));
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(ICategoryRepository).Assembly));
 // ---------------- AutoMapper ----------------
 builder.Services.AddAutoMapper(typeof(CustomerAppProfile).Assembly,
                                typeof(CustomerInfraProfile).Assembly,
                                typeof(ProductAppProfile).Assembly,
-                               typeof(ProductInfraProfile).Assembly);
+                               typeof(ProductInfraProfile).Assembly,
+                               typeof(CategoryAppProfile).Assembly,
+                               typeof(CategoryInfraProfile).Assembly);
 
 
 // ---------------- API Behavior ----------------
@@ -50,6 +54,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 // ---------------- Swagger ----------------
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
