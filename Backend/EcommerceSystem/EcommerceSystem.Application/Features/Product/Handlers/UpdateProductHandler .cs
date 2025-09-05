@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EcommerceSystem.Application.DTOs.Responses.Product;
 using EcommerceSystem.Application.Features.Product.Commands;
+using EcommerceSystem.Application.Interfaces;
 using EcommerceSystem.Application.Interfaces.Repositories;
 using MediatR;
 
@@ -16,6 +17,7 @@ namespace EcommerceSystem.Application.Features.Product.Handlers
 
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
         public UpdateProductHandler(IProductRepository productRepository, IMapper mapper)
         {
@@ -24,6 +26,7 @@ namespace EcommerceSystem.Application.Features.Product.Handlers
         }
         public async Task<ProductResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync();
             var product = await _productRepository.GetByIdAsync(request.id);
             if (product == null) return null;
 
@@ -41,7 +44,7 @@ namespace EcommerceSystem.Application.Features.Product.Handlers
 
 
             await _productRepository.UpdateAsync(product);
-            await _productRepository.SaveChangesAsync();
+            await _unitOfWork.CommitTransactionAsync();
             return _mapper.Map<ProductResponse>(product);
 
         }

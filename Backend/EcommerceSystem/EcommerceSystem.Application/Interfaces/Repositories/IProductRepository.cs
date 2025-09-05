@@ -16,6 +16,6 @@ namespace EcommerceSystem.Application.Interfaces.Repositories
         Task<ProductEntity> AddAsync(ProductEntity productEntity);
         Task<bool> UpdateAsync(ProductEntity productEntity);
         Task DeleteAsync(ProductEntity productEntity);
-        Task<int> SaveChangesAsync();
+        //Task<int> SaveChangesAsync();
     }
 }

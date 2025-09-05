@@ -30,7 +30,7 @@ namespace EcommerceSystem.Infrastructure.Repositories
         {
             var product = _mapper.Map<Product>(productEntity);
             await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return _mapper.Map<ProductEntity>(product);
         }
             
@@ -66,17 +66,17 @@ namespace EcommerceSystem.Infrastructure.Repositories
             return _mapper.Map<ProductEntity?>(product);
         }
 
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
+        //public async Task<int> SaveChangesAsync()
+        //{
+        //    return await _context.SaveChangesAsync();
+        //}
 
         public async Task<bool> UpdateAsync(ProductEntity productEntity)
         {
             var product = await _context.Products.FindAsync(productEntity.Id);
             if (product == null) return false;
             _mapper.Map(productEntity, product);
-            await _context.SaveChangesAsync();
+          //  await _context.SaveChangesAsync();
             return true;
         }
     }

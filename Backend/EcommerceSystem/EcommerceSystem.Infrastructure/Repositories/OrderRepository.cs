@@ -26,7 +26,7 @@ namespace EcommerceSystem.Infrastructure.Repositories
         {
             var dborder = _mapper.Map<Order>(orderentity);
              _context.Orders.Add(dborder);
-            await  _context.SaveChangesAsync();
+            //await  _context.SaveChangesAsync();
             return _mapper.Map<OrderEntity>(dborder);
         }
 
@@ -60,7 +60,7 @@ namespace EcommerceSystem.Infrastructure.Repositories
         {
             var dborder = _mapper.Map<Order>(order);
             _context.Orders.Update(dborder);
-            await _context.SaveChangesAsync();
+           // await _context.SaveChangesAsync();
             return _mapper.Map<OrderEntity>(dborder);
         }
     }
