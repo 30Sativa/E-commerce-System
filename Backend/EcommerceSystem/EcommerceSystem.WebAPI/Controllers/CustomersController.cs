@@ -58,7 +58,7 @@ namespace EcommerceSystem.WebAPI.Controllers
         {
             var success = await _mediator.Send(new DeleteCustomerCommand(id));
             if (!success)
-                return NotFound(BaseResponse<bool>.FailResponse("Customer not found"));
+                return NotFound(BaseResponse<bool>.FailResponse("Customer not found")); 
 
             return Ok(BaseResponse<bool>.SuccessResponse(true, "Customer deleted successfully"));
         }

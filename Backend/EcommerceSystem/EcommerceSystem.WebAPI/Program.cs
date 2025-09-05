@@ -27,7 +27,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginValidator>());
 builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 // ---------------- MediatR (CQRS) ----------------
 // Quét toàn bộ assembly của Application
 builder.Services.AddMediatR(cfg =>
@@ -36,13 +40,19 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(IProductRepository).Assembly));
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ICategoryRepository).Assembly));
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(IOrderRepository).Assembly));
 // ---------------- AutoMapper ----------------
 builder.Services.AddAutoMapper(typeof(CustomerAppProfile).Assembly,
                                typeof(CustomerInfraProfile).Assembly,
                                typeof(ProductAppProfile).Assembly,
                                typeof(ProductInfraProfile).Assembly,
                                typeof(CategoryAppProfile).Assembly,
-                               typeof(CategoryInfraProfile).Assembly);
+                               typeof(CategoryInfraProfile).Assembly,
+                               typeof(OrderAppProfile).Assembly,
+                               typeof(OrderInfraProfile).Assembly,
+                               typeof(VoucherAppProfile).Assembly,
+                               typeof(VoucherInfraProfile).Assembly);
 
 
 // ---------------- API Behavior ----------------
@@ -61,6 +71,9 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 // ---------------- Swagger ----------------
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
