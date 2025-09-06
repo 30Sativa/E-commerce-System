@@ -2,6 +2,7 @@
 using EcommerceSystem.Application.DTOs.Requests.Order;
 using EcommerceSystem.Application.DTOs.Responses.Order;
 using EcommerceSystem.Application.Features.Order.Commands;
+using EcommerceSystem.Application.Features.Order.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,13 @@ namespace EcommerceSystem.WebAPI.Controllers
         {
             var update = await _mediator.Send(new UpdateOrderCommand(request));
             return Ok(BaseResponse<OrderResponse>.SuccessResponse(update, "Order update succesfully"));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await _mediator.Send(new GetAllOrdersQuery());
+            return Ok(BaseResponse<IEnumerable<OrderResponse>>.SuccessResponse(orders, "Get all orders successfully"));
         }
     }
 }
