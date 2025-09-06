@@ -24,5 +24,12 @@ namespace EcommerceSystem.WebAPI.Controllers
             var create = await _mediator.Send(new CreateOrderCommand(request));
             return Ok(BaseResponse<OrderResponse>.SuccessResponse(create, "Order create succesfully"));
         }
+
+        [HttpPut("{orderId}")]
+        public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] UpdateOrderRequest request)
+        {
+            var update = await _mediator.Send(new UpdateOrderCommand(request));
+            return Ok(BaseResponse<OrderResponse>.SuccessResponse(update, "Order update succesfully"));
+        }
     }
 }
