@@ -14,5 +14,7 @@ namespace EcommerceSystem.Application.Interfaces.Repositories
         Task<List<OrderEntity>> GetAllAsync();
         Task<List<OrderEntity>> GetByCustomerIdAsync(int customerId);
         Task<OrderEntity> UpdateAsync(OrderEntity order);
+
+        
     }
 }
