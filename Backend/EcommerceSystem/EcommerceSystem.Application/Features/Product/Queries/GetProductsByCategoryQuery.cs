@@ -8,7 +8,7 @@ using MediatR;
 
 namespace EcommerceSystem.Application.Features.Product.Queries
 {
-    public class GetProductsByCategoryQuery(int category) : IRequest<IEnumerable<ProductResponse>>
+    public record GetProductsByCategoryQuery(int category) : IRequest<IEnumerable<ProductResponse>>
     {
     }
 }

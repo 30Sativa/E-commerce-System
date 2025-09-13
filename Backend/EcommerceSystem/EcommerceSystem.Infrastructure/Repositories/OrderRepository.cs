@@ -41,8 +41,10 @@ namespace EcommerceSystem.Infrastructure.Repositories
         public async Task<List<OrderEntity>> GetByCustomerIdAsync(int customerId)
         {
             var dborder = await _context.Orders
-                .Include(o => o.Orderdetails)
                 .Where(o => o.Customerid == customerId)
+                .Include(o => o.Orderdetails)
+                    .ThenInclude(od => od.Product)
+                .Include(o => o.Voucher)
                 .ToListAsync();
 
             return _mapper.Map<List<OrderEntity>>(dborder);

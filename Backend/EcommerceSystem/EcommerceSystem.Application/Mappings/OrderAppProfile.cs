@@ -13,7 +13,7 @@ namespace EcommerceSystem.Application.Mappings
     {
         public OrderAppProfile()
         {
-            CreateMap<OrderEntity, OrderResponse>();
+            CreateMap<OrderEntity, OrderResponse>().ReverseMap();
             CreateMap<OrderDetailEntity, OrderDetailResponse>();
         }
     }

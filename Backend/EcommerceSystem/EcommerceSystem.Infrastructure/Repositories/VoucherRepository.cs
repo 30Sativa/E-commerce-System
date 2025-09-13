@@ -27,4 +27,5 @@ namespace EcommerceSystem.Infrastructure.Repositories
             return _mapper.Map<VoucherEntity?>(dbvoucher);
         }
     }
+    
 }

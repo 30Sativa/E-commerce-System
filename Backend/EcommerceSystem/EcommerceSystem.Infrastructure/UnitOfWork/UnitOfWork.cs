@@ -7,7 +7,7 @@ using EcommerceSystem.Application.Interfaces;
 using EcommerceSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace EcommerceSystem.Infrastructure.Services
+namespace EcommerceSystem.Infrastructure.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

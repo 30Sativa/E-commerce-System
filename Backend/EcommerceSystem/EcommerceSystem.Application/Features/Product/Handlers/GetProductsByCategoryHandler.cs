@@ -25,9 +25,10 @@ namespace EcommerceSystem.Application.Features.Product.Handlers
         }
 
 
-        public Task<IEnumerable<ProductResponse>> Handle(GetProductsByCategoryQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ProductResponse>> Handle(GetProductsByCategoryQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var list = await _productRepository.GetByCategoryAsync(request.category);
+            return _mapper.Map<IEnumerable<ProductResponse>>(list);
         }
     }
 }

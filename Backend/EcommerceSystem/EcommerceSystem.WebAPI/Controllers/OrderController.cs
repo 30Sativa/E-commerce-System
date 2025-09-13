@@ -39,5 +39,12 @@ namespace EcommerceSystem.WebAPI.Controllers
             var orders = await _mediator.Send(new GetAllOrdersQuery());
             return Ok(BaseResponse<IEnumerable<OrderResponse>>.SuccessResponse(orders, "Get all orders successfully"));
         }
+
+        [HttpGet("customer/{customerid}")]
+        public async Task<IActionResult> GetOrdersByCustomerId(int customerid)
+        {
+            var orders = await _mediator.Send(new GetCustomerByOrdersQuery(customerid));
+            return Ok(BaseResponse<List<OrderResponse>>.SuccessResponse(orders, "Get orders by customer id successfully"));
+        }
     }
 }

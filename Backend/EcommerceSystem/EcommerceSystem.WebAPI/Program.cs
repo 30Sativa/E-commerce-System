@@ -14,11 +14,10 @@ using MediatR;
 using EcommerceSystem.Application.Interfaces.Repositories;
 using EcommerceSystem.Infrastructure.Repositories;
 using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using EcommerceSystem.Application.Mappings;
 using EcommerceSystem.Infrastructure.Mappings;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
-
+using EcommerceSystem.Infrastructure.UnitOfWork;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,8 +31,8 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
+
 // ---------------- MediatR (CQRS) ----------------
-// Quét toàn bộ assembly của Application
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ICustomerRepository).Assembly));
 builder.Services.AddMediatR(cfg =>
@@ -42,17 +41,22 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ICategoryRepository).Assembly));
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(IOrderRepository).Assembly));
-// ---------------- AutoMapper ----------------
-builder.Services.AddAutoMapper(typeof(CustomerAppProfile).Assembly,
-                               typeof(CustomerInfraProfile).Assembly,
-                               typeof(ProductAppProfile).Assembly,
-                               typeof(ProductInfraProfile).Assembly,
-                               typeof(CategoryAppProfile).Assembly,
-                               typeof(CategoryInfraProfile).Assembly,
-                               typeof(OrderAppProfile).Assembly,
-                               typeof(OrderInfraProfile).Assembly,
-                               typeof(VoucherAppProfile).Assembly,
-                               typeof(VoucherInfraProfile).Assembly);
+
+// Fix for CS0121: Specify the generic overload explicitly to resolve ambiguity
+builder.Services.AddAutoMapper(
+    typeof(CustomerAppProfile),
+    typeof(CustomerInfraProfile),
+    typeof(ProductAppProfile),
+    typeof(ProductInfraProfile),
+    typeof(CategoryAppProfile),
+    typeof(CategoryInfraProfile),
+    typeof(OrderAppProfile),
+    typeof(OrderInfraProfile),
+    typeof(VoucherAppProfile),
+    typeof(VoucherInfraProfile)
+);
+
+
 
 
 // ---------------- API Behavior ----------------
@@ -60,12 +64,14 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true; // dùng middleware custom
 });
-//------------------Redis-------------------
+
+// ---------------- Redis ----------------
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
     options.InstanceName = "ECommerce_";
 });
+
 // ---------------- Dependency Injection ----------------
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -74,6 +80,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+
 // ---------------- Swagger ----------------
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
