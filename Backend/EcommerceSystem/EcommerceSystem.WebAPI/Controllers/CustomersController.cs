@@ -62,5 +62,12 @@ namespace EcommerceSystem.WebAPI.Controllers
 
             return Ok(BaseResponse<bool>.SuccessResponse(true, "Customer deleted successfully"));
         }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            var response = await _mediator.Send(new ChangePasswordCommand(request));
+            return Ok(BaseResponse<ChangePasswordResponse>.SuccessResponse(response, "Password changed successfully"));
+        }
     }
 }

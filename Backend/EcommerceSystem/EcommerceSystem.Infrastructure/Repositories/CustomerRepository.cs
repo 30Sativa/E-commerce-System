@@ -10,6 +10,7 @@ using EcommerceSystem.Application.Interfaces.Repositories;
 using EcommerceSystem.Domain.Entities;
 using EcommerceSystem.Infrastructure.Persistence;
 using EcommerceSystem.Infrastructure.Persistence.Models;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceSystem.Infrastructure.Repositories
@@ -34,6 +35,17 @@ namespace EcommerceSystem.Infrastructure.Repositories
 
             return _mapper.Map<CustomerEntity>(customer);
 
+        }
+
+        public async Task Changepassword(CustomerEntity customerEntity)
+        {
+            var customer = await _context.Customers.FindAsync(customerEntity.Id);
+            if (customer == null)
+            {
+                throw new KeyNotFoundException("Customer not found");
+            }
+            customer.Passwordhash = customerEntity.PasswordHash;
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(CustomerEntity customerEntity)

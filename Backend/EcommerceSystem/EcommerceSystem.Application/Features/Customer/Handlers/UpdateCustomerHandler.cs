@@ -24,7 +24,7 @@ namespace EcommerceSystem.Application.Features.Customer.Handlers
             _mapper = mapper;
         }
         public async Task<CustomerResponse> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
-        {
+        {   
             var customer = await _customerRepository.GetByIdAsync(request.id);
             if (customer == null) return null; // controller sẽ check null => 404
 
