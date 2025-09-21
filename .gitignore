@@ -11,6 +11,17 @@
 *.sln.docstates
 *.env
 
+# --- 🔒 Environment & secrets ---
+.env
+.env.*                  # ignore tất cả file .env.* 
+!.env.example           # ngoại lệ: cho phép commit file mẫu (chứa placeholder)
+.env.local              # ignore file .env.local thực tế
+
+# --- 🔒 ASP.NET Core appsettings ---
+appsettings.json
+appsettings.*.json      # ignore tất cả appsettings môi trường (chứa secret)
+!appsettings.Development.json.example   # ngoại lệ: commit bản ví dụ thôi
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

@@ -1,4 +1,5 @@
 ﻿using EcommerceSystem.Application.Common;
+using EcommerceSystem.Application.Common.Exceptions;
 using EcommerceSystem.Application.DTOs.Requests.Auth;
 using EcommerceSystem.Application.DTOs.Responses.Auth;
 using EcommerceSystem.Application.Features.Auth.Commands;
@@ -36,8 +37,21 @@ namespace EcommerceSystem.WebAPI.Controllers
         [HttpPost("google-login")]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
         {
-            var response = await _mediator.Send(new GoogleLoginCommand(request.IdToken));
-            return Ok(BaseResponse<AuthResponse>.SuccessResponse(response, "Google login success"));
+            try
+            {
+                var response = await _mediator.Send(new GoogleLoginCommand(request.IdToken));
+                return Ok(BaseResponse<AuthResponse>.SuccessResponse(response, "Google login success"));
+            }
+            catch (BusinessException ex)
+            {
+                // 400 Bad Request cho lỗi nghiệp vụ
+                return BadRequest(BaseResponse<string>.FailResponse(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                // 500 Internal Server Error cho lỗi hệ thống
+                return StatusCode(500, BaseResponse<string>.FailResponse("Google login error: " + ex.Message));
+            }
         }
     }
 }

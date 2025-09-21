@@ -32,10 +32,10 @@ namespace EcommerceSystem.Application.Features.Customer.Handlers
                 throw new Exception("User not found");
 
             // Validate old password
-            Console.WriteLine($"OldPassword sent: '{request.request.OldPassword}'");
-            Console.WriteLine($"PasswordHash in DB: '{user.PasswordHash}'");
+            //Console.WriteLine($"OldPassword sent: '{request.request.OldPassword}'");
+            //Console.WriteLine($"PasswordHash in DB: '{user.PasswordHash}'");
             bool isValidate = BCrypt.Net.BCrypt.Verify(request.request.OldPassword, user.PasswordHash);
-            Console.WriteLine($"Password verify result: {isValidate}");
+            //Console.WriteLine($"Password verify result: {isValidate}");
             if (!isValidate)
                 throw new Exception("Old Password is incorrect");
 
