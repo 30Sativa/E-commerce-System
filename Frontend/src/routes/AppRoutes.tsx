@@ -3,14 +3,13 @@ import LoginPage from "../pages/auth/Login";
 import DashboardPage from "../pages/Dashboard";
 import AdminPage from "../pages/Admin";
 import PrivateRoute from "./PrivateRoute";
-
+import HomePage from "../pages/HomePage";
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Route mặc định */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
 
         <Route
