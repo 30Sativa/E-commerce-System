@@ -23,6 +23,22 @@ namespace EcommerceSystem.Infrastructure.Mappings
                 .ForMember(dest => dest.Categoryid, opt => opt.MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.Createdat, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.Updatedat, opt => opt.MapFrom(src => src.UpdatedAt));
+
+
+            // Productimage <-> ProductImageEntity
+            CreateMap<Productimage, ProductImageEntity>()
+                .ForMember(d => d.Id, m => m.MapFrom(s => s.Imageid))
+                .ForMember(d => d.ProductId, m => m.MapFrom(s => s.Productid))
+                .ForMember(d => d.ImageUrl, m => m.MapFrom(s => s.Imageurl))
+                .ForMember(d => d.IsMain, m => m.MapFrom(s => s.Ismain))
+                .ForMember(d => d.CreatedAt, m => m.MapFrom(s => s.Createdat));
+
+            CreateMap<ProductImageEntity, Productimage>()
+                .ForMember(d => d.Imageid, m => m.MapFrom(s => s.Id))
+                .ForMember(d => d.Productid, m => m.MapFrom(s => s.ProductId))
+                .ForMember(d => d.Imageurl, m => m.MapFrom(s => s.ImageUrl))
+                .ForMember(d => d.Ismain, m => m.MapFrom(s => s.IsMain))
+                .ForMember(d => d.Createdat, m => m.MapFrom(s => s.CreatedAt));
         }
     }
 }

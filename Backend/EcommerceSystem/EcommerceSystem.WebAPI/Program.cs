@@ -18,6 +18,7 @@ using EcommerceSystem.Application.Mappings;
 using EcommerceSystem.Infrastructure.Mappings;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using EcommerceSystem.Infrastructure.UnitOfWork;
+using Microsoft.Extensions.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -80,6 +81,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 
 // ---------------- Swagger ----------------
 builder.Services.AddEndpointsApiExplorer();
