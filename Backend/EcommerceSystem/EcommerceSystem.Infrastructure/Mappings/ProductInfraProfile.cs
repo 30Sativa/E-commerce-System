@@ -18,11 +18,13 @@ namespace EcommerceSystem.Infrastructure.Mappings
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Categoryid))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.Createdat))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.Updatedat))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Productimages.FirstOrDefault(pi => pi.Ismain).Imageurl))
                 .ReverseMap()
                 .ForMember(dest => dest.Productid, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Categoryid, opt => opt.MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.Createdat, opt => opt.MapFrom(src => src.CreatedAt))
-                .ForMember(dest => dest.Updatedat, opt => opt.MapFrom(src => src.UpdatedAt));
+                .ForMember(dest => dest.Updatedat, opt => opt.MapFrom(src => src.UpdatedAt))
+                .ForMember(dest => dest.Productimages, opt => opt.Ignore());
 
 
             // Productimage <-> ProductImageEntity

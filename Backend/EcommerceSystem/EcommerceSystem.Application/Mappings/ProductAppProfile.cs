@@ -18,7 +18,8 @@ namespace EcommerceSystem.Application.Mappings
         {
             // Domain -> Response
             CreateMap<ProductEntity, ProductResponse>()
-                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id));
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl)).ReverseMap();
 
 
             // Request -> Domain

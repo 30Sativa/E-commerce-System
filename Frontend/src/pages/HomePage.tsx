@@ -6,7 +6,7 @@ interface Product {
   id: number;
   name: string;
   price: number;
-  image: string;
+  imageUrl?: string;
 }
 interface Category {
   id: number;
@@ -33,6 +33,8 @@ const HomePage: React.FC = () => {
     };
     fetchData();
   }, []);
+
+
 
   return (
     <div className="font-sans bg-white">
@@ -128,7 +130,7 @@ const HomePage: React.FC = () => {
               >
                 <div className="relative group">
                   <img
-                    src={p.image || "https://via.placeholder.com/400x500"}
+                    src={p.imageUrl || "https://via.placeholder.com/400x500"}
                     alt={p.name}
                     className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
                   />

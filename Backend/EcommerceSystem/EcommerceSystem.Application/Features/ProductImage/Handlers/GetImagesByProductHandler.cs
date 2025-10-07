@@ -9,6 +9,7 @@ using EcommerceSystem.Application.Features.ProductImage.Queries;
 using EcommerceSystem.Application.Interfaces;
 using EcommerceSystem.Application.Interfaces.Repositories;
 using MediatR;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EcommerceSystem.Application.Features.ProductImage.Handlers
 {
@@ -25,7 +26,7 @@ namespace EcommerceSystem.Application.Features.ProductImage.Handlers
 
         public async Task<IEnumerable<ProductImageResponse>> Handle(GetImagesByProductQuery request, CancellationToken cancellationToken)
         {
-            var images = await _productImageRepository.GetByIdAsync(request.ProductId);
+            var images = await _productImageRepository.GetByProductIdAsync(request.ProductId);
             return _mapper.Map<IEnumerable<ProductImageResponse>>(images);
         }
     }
