@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/auth/Login";
-import DashboardPage from "../pages/Dashboard";
 import AdminPage from "../pages/Admin";
 import PrivateRoute from "./PrivateRoute";
 import HomePage from "../pages/HomePage";
@@ -16,7 +15,7 @@ export default function AppRoutes() {
           path="/dashboard"
           element={
             <PrivateRoute>
-              <DashboardPage />
+              <h1>Dashboard</h1>
             </PrivateRoute>
           }
         />
@@ -24,7 +23,7 @@ export default function AppRoutes() {
         <Route
           path="/admin"
           element={
-            <PrivateRoute roles={["Admin"]}>
+            <PrivateRoute roles={["admin"]}>
               <AdminPage />
             </PrivateRoute>
           }

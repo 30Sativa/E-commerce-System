@@ -6,8 +6,8 @@ import { decodeToken, type JwtPayload } from "../utils/jwt";
 type AuthContextType = {
   user: JwtPayload | null;
   token: string | null;
-  login: (email: string, password: string) => Promise<void>;
-  loginWithGoogle: (idToken: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<JwtPayload>;
+  loginWithGoogle: (idToken: string) => Promise<JwtPayload>;
   logout: () => void;
 };
 
@@ -52,6 +52,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(token);
 
       localStorage.setItem("token", token);
+
+      return decoded;
     } catch (err) {
       console.error("Login error:", err);
       throw err;
@@ -77,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       localStorage.setItem("token", token);
       console.log("Google login successful");
+      return decoded;
     } catch (err) {
       console.error("Google login error:", err);
       throw err;

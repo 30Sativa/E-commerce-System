@@ -15,7 +15,10 @@ export default function PrivateRoute({
     return <Navigate to="/login" replace />;
   }
 
-  if (roles && !roles.includes(user.role)) {
+  if (
+    roles &&
+    !roles.map((r) => r.toLowerCase()).includes(user.role?.toLowerCase())
+  ) {
     return <Navigate to="/unauthorized" replace />;
   }
 
